@@ -29,8 +29,8 @@ def traverse_nodes(node: MCTSNode, board: Board, state, bot_identity: int):
 
     for child in node.child_nodes:
         cur_child = node.child_nodes[child]
-        UCB = ucb(child, state, False)
-        if UCB > top_UCB:
+        UCB = ucb(cur_child, False)
+        if UCB >= top_UCB:
             top_UCB = UCB
             best_child = cur_child
     
@@ -135,7 +135,15 @@ def get_best_action(root_node: MCTSNode):
         action: The best action from the root node
     
     """
-    pass
+    best = float("-inf")
+    best_action = None
+    for child in root_node.child_nodes:
+        cur_child = root_node.child_nodes[child]
+        if cur_child.wins >= best:
+            best = cur_child.wins
+            best_action = cur_child.parent_action
+    return best_action
+
 
 def is_win(board: Board, state, identity_of_bot: int):
     # checks if state is a win state for identity_of_bot
@@ -168,14 +176,18 @@ def think(board: Board, current_state):
             node.visits += 1
             node, sim_state = traverse_nodes(node, board, sim_state, bot_identity)
 
-        # # Expansion Step
-        expand_leaf(node, board, sim_state)
+        # Expansion Step
+        node, state = expand_leaf(node, board, sim_state)
 
-        # # Simulation Step
-        # rollout(board: Board, state)
+        # Simulation Step
+        state = rollout(board, state)
+        if is_win(board, state, bot_identity):
+            won = True
+        else:
+            won = False
 
-        # # Backpropogation Step
-        # backpropagate(node: MCTSNode|None, won: bool)
+        # Backpropogation Step
+        backpropagate(node, won)
 
 
     # Return an action, typically the most frequently used action (from the root) or the action with the best
