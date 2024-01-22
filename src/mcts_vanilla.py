@@ -4,7 +4,7 @@ from p2_t3 import Board
 from random import choice
 from math import sqrt, log
 
-num_nodes = 100
+num_nodes = 1000
 explore_faction = 2.
 
 def traverse_nodes(node: MCTSNode, board: Board, state, bot_identity: int):
@@ -81,11 +81,11 @@ def rollout(board: Board, state):
         state: The terminal game state
 
     """
-    # while(state.legal_moves!=[]):    
-    #     state.apply_move(choice(state.legal_moves))
-    while board.legal_actions(state) != []:
+    while not board.is_ended(state):
         moves = board.legal_actions(state)
-        state = board.next_state(state, choice(moves))
+        move = choice(moves)
+        state = board.next_state(state, move)
+
     return state
 
 
@@ -139,9 +139,9 @@ def get_best_action(root_node: MCTSNode):
     best_action = None
     for child in root_node.child_nodes:
         cur_child = root_node.child_nodes[child]
-        if cur_child.wins >= best:
-            best = cur_child.wins
-            best_action = cur_child.parent_action
+        if cur_child.wins / cur_child.visits >= best:
+            best = cur_child.wins / cur_child.visits
+            best_action = child
     return best_action
 
 
@@ -170,14 +170,16 @@ def think(board: Board, current_state):
         # Do MCTS - This is all you!
         # ...
 
-        sim_state = tuple(state)
         # Selection Step
         while node.untried_actions == [] and node.child_nodes != {}:
             node.visits += 1
-            node, sim_state = traverse_nodes(node, board, sim_state, bot_identity)
+            node, state = traverse_nodes(node, board, state, bot_identity)
 
         # Expansion Step
-        node, state = expand_leaf(node, board, sim_state)
+        if node.untried_actions != []:
+            node, state = expand_leaf(node, board, state)
+            node.visits += 1
+            node, state = traverse_nodes(node, board, state, bot_identity)
 
         # Simulation Step
         state = rollout(board, state)
