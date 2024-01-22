@@ -23,10 +23,15 @@ def traverse_nodes(node: MCTSNode, board: Board, state, bot_identity: int):
         state: The state associated with that node
 
     """
+    # case for no children
+    if not node.child_nodes:
+        return node, state
+
     best_child = node
     top_UCB = 0
     new_state = state
 
+    # grabbing bounds
     for child in node.child_nodes:
         cur_child = node.child_nodes[child]
         UCB = ucb(cur_child, False)
@@ -34,6 +39,7 @@ def traverse_nodes(node: MCTSNode, board: Board, state, bot_identity: int):
             top_UCB = UCB
             best_child = cur_child
     
+    # setting best child and updating state
     if best_child.parent_action != None:
         new_state = board.next_state(state, best_child.parent_action)
     return best_child, new_state
@@ -81,6 +87,7 @@ def rollout(board: Board, state):
         state: The terminal game state
 
     """
+    # playout the game with random actions
     while not board.is_ended(state):
         moves = board.legal_actions(state)
         move = choice(moves)
@@ -99,6 +106,7 @@ def backpropagate(node: MCTSNode|None, won: bool):
         won:    An indicator of whether the bot won or lost the game.
 
     """
+    # trace back through nodes and update values
     while node:
         node.visits += 1
         if won:
@@ -137,6 +145,7 @@ def get_best_action(root_node: MCTSNode):
     """
     best = float("-inf")
     best_action = None
+    # go through root children and find best winrate 
     for child in root_node.child_nodes:
         cur_child = root_node.child_nodes[child]
         if cur_child.wins / cur_child.visits >= best:
