@@ -20,7 +20,7 @@ players = dict(
 board = p2_t3.Board()
 state0 = board.starting_state()
 
-if len(sys.argv) >= 3:
+if len(sys.argv) <= 3:
     print("Need two player arguments")
     exit(1)
 
@@ -47,7 +47,7 @@ for i in range(rounds):
     current_player = player1
     while not board.is_ended(state):
         if current_player == exp_mcts_vanilla.think or current_player == exp_mcts_vanilla.think:
-            last_action = current_player(board, state, sys.argv[3], sys.argv[4])
+            last_action = current_player(board, state, int(sys.argv[3]), float(sys.argv[4]))
         else:
             last_action = current_player(board, state)
         state = board.next_state(state, last_action)

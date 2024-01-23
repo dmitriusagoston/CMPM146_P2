@@ -5,11 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Exp1",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/src/experiment1.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
             "name": "Python: Current File",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/src/p2_sim.py",
-            "args": ["mcts_vanilla", "rollout_bot"],
+            "args": [
+                "mcts_vanilla",
+                "rollout_bot"
+            ],
             "console": "integratedTerminal",
             "justMyCode": true
         }

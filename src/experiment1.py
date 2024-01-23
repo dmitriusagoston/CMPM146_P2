@@ -1,10 +1,10 @@
 import subprocess
 import time
-script_path = 'experiment1.py'
+script_path = '.\src\p2_exp.py'
 arguments200 = ['mcts_vanilla', 'exp_mcts_vanilla', '200', '2.']
 arguments500 = ['mcts_vanilla', 'exp_mcts_vanilla', '500', '2.']
 arguments1000 = ['mcts_vanilla', 'exp_mcts_vanilla', '1000', '2.']
-arguments1500 = ['mcts_vanilla', 'exp_mcts_vanilla', '1500, 2.']
+arguments1500 = ['mcts_vanilla', 'exp_mcts_vanilla', '1500', '2.']
 
 # Construct the command to run the script
 command200 = ['python', script_path] + arguments200
@@ -12,14 +12,9 @@ command500 = ['python', script_path] + arguments500
 command1000 = ['python', script_path] + arguments1000
 command1500 = ['python', script_path] + arguments1500
 
-print("Processing: ", end='', flush=True)
-for _ in range(100):
-    time.sleep(1)
-    print("\rProcessing: {}%".format(_), end='', flush=True)
-
 print("Starting 200 nodes test \n")
 print("Processing: ", end='', flush=True)
-for _ in range(100):
+for _ in range(2):
     print("\rProcessing: {}%".format(_), end='', flush=True)
     # Run the script using subprocess and capture the output
     try:
@@ -37,7 +32,7 @@ for _ in range(100):
 print("Finished 200 nodes test \n")
 print("Starting 500 nodes test \n")
 print("Processing: ", end='', flush=True)
-for _ in range(100):
+for _ in range(2):
     print("\rProcessing: {}%".format(_), end='', flush=True)
     # Run the script using subprocess and capture the output
     try:
@@ -55,7 +50,7 @@ for _ in range(100):
 print("Finished 500 nodes test \n")
 print("Starting 1000 nodes test \n")
 print("Processing: ", end='', flush=True)
-for _ in range(100):
+for _ in range(2):
     print("\rProcessing: {}%".format(_), end='', flush=True)
     # Run the script using subprocess and capture the output
     try:
@@ -73,7 +68,7 @@ for _ in range(100):
 print("Finished 1000 nodes test \n")
 print("Starting 1500 nodes test \n")
 print("Processing: ", end='', flush=True)
-for _ in range(100):
+for _ in range(2):
     print("\rProcessing: {}%".format(_), end='', flush=True)
     # Run the script using subprocess and capture the output
     try:
