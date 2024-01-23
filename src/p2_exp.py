@@ -64,4 +64,3 @@ print("")
 
 # Also output the time elapsed.
 end = time()
-print(end - start, ' seconds')
