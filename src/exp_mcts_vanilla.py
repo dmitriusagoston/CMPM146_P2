@@ -4,7 +4,7 @@ from p2_t3 import Board
 from random import choice
 from math import sqrt, log
 
-num_nodes = 100
+num_nodes = 1000
 explore_faction = 2.
 
 def traverse_nodes(node: MCTSNode, board: Board, state, bot_identity: int):
@@ -157,7 +157,7 @@ def is_win(board: Board, state, identity_of_bot: int):
     assert outcome is not None, "is_win was called on a non-terminal state"
     return outcome[identity_of_bot] == 1
 
-def think(board: Board, current_state):
+def think(board: Board, current_state, nn: int = 1000, ef: float = 2.):
     """ Performs MCTS by sampling games and calling the appropriate functions to construct the game tree.
 
     Args:
@@ -167,6 +167,11 @@ def think(board: Board, current_state):
     Returns:    The action to be taken from the current state
 
     """
+    global num_nodes
+    global explore_faction
+    num_nodes = nn
+    explore_faction = ef
+
     bot_identity = board.current_player(current_state) # 1 or 2
     root_node = MCTSNode(parent=None, parent_action=None, action_list=board.legal_actions(current_state))
 
