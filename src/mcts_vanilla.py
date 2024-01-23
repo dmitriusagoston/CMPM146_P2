@@ -24,8 +24,8 @@ def traverse_nodes(node: MCTSNode, board: Board, state, bot_identity: int):
 
     """
     # case for no children
-    if not node.child_nodes:
-        return node, state
+    # if not node.child_nodes:
+    #     return node, state
 
     best_child = node
     top_UCB = 0
@@ -180,9 +180,12 @@ def think(board: Board, current_state):
         # ...
 
         # Selection Step
-        while node.untried_actions == [] and node.child_nodes != {}:
+        while node.untried_actions == []: #and node.child_nodes != {}:
+            prev = node
             node.visits += 1
             node, state = traverse_nodes(node, board, state, bot_identity)
+            if node.child_nodes == {} and prev == node:
+                break
 
         # Expansion Step
         if node.untried_actions != []:
