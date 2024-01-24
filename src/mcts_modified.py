@@ -4,7 +4,7 @@ from p2_t3 import Board
 from random import choice
 from math import sqrt, log
 
-num_nodes = 1000
+num_nodes = 2000
 explore_faction = 2.
 
 def traverse_nodes(node: MCTSNode, board: Board, state, bot_identity: int):
@@ -26,14 +26,25 @@ def traverse_nodes(node: MCTSNode, board: Board, state, bot_identity: int):
 
     best_child = node
     top_UCB = 0
+    avg_UCB = 0
+    top_heuristic = 0
     new_state = state
+
+    if (len(node.child_nodes) != 0):
+        # calculates average
+        for child in node.child_nodes:
+            UCB = ucb(node.child_nodes[child], False)
+            avg_UCB += UCB
+        
+        avg_UCB = avg_UCB / len(node.child_nodes)
 
     # grabbing bounds
     for child in node.child_nodes:
         cur_child = node.child_nodes[child]
         UCB = ucb(cur_child, False)
-        if UCB >= top_UCB:
-            top_UCB = UCB
+        heuristic = 0.8 * avg_UCB + 0.2 * UCB
+        if heuristic >= top_heuristic:
+            top_heuristic = heuristic
             best_child = cur_child
     
     # setting best child and updating state
